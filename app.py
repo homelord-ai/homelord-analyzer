@@ -3,8 +3,6 @@ from google import genai
 from google.genai import types
 
 # --- CONFIGURATION ---
-# In a real deployment, put your API key in Streamlit secrets (.streamlit/secrets.toml)
-# For local testing, paste it below.
 api_key = st.secrets.get("GEMINI_API_KEY", "YOUR_GEMINI_API_KEY_HERE")
 
 # Initialize Gemini Client
@@ -96,7 +94,6 @@ if st.button("Analyze Deal"):
                 )
 
                 # Call Gemini
-                # We use 'gemini-2.0-flash' or 'gemini-1.5-pro' as they support search grounding well.
                 response = client.models.generate_content(
                     model='gemini-2.0-flash', 
                     contents=f"Analyze this property: {address}",
@@ -108,15 +105,10 @@ if st.button("Analyze Deal"):
                 )
                 
                 # Extract and display result
-                # Gemini often returns "grounding metadata" (sources).
-                # The text response is usually in the first candidate.
                 analysis = response.text
                 st.markdown(analysis)
                 
-                # Optional: Show Sources (Grounding)
-                if response.candidates[0].grounding_metadata.search_entry_point:
-                     st.markdown("---")
-                     st.caption(f"Sources found: {response.candidates[0].grounding_metadata.search_entry_point.rendered_content}")
+                # (Source code block removed here)
 
             except Exception as e:
                 st.error(f"An error occurred: {e}")
